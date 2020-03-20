@@ -1,0 +1,6 @@
+5
+ADD_FIRST David Bowie - Superstar.mp3
+ADD_AFTER John Lennon - Imagine.mp3
+ADD_LAST Jimi Hendrix - Hey Joe.mp3
+DEL_SONG Queen - Innuendo.mp3
+DEL_FIRST
