@@ -27,9 +27,9 @@ void show_curr(struct LinkedList *list, FILE *out);
 
 void show_playlist(struct LinkedList *list, FILE *out);
 
-void move_prev(struct LinkedList *list);
+void move_prev(struct LinkedList *list, FILE *out);
 
-void move_next(struct LinkedList *list);
+void move_next(struct LinkedList *list, FILE *out);
 
 void free_list(struct LinkedList **pp_list);
 

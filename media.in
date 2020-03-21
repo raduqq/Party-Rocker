@@ -1,17 +1,6 @@
-16
-SHOW_FIRST
-SHOW_CURR
-SHOW_LAST
-ADD_FIRST ACDC - TNT.mp3
-SHOW_FIRST
-SHOW_CURR
-SHOW_LAST
-ADD_FIRST Justin Bieber - Baby.mp3
-DEL_SONG Costel Biju - Nebunia din Mamaia.mp3
-ADD_FIRST The Beatles - Hey Jude.mp3
-DEL_SONG ACDC - TNT.mp3
-ADD_FIRST Ian x Azteca - BAG UN BLUNT.mp3
-SHOW_FIRST
-SHOW_CURR
-SHOW_LAST
+5
+DEL_SONG Metallica - Battery.mp3
+ADD_FIRST O-Zone - De Ce Plang Chitarele.mp3
+DEL_SONG O-Zone - De Ce Plang Chitarele.mp3
+DEL_SONG O-Zone - De Ce Plang Chitarele.mp3
 SHOW_PLAYLIST

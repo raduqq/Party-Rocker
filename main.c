@@ -92,8 +92,10 @@ int main(int argc, char **argv) {
             del_song(playlist, melody.title, out);
             break;
         case 7:
+            move_next(playlist, out);
             break;
         case 8:
+            move_prev(playlist, out);
             break;
         case 9:
             show_first(playlist, out);

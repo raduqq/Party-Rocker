@@ -62,17 +62,13 @@ void add_first(struct LinkedList *list, struct metadata *value, FILE *out) {
 }
 
 void del_song(struct LinkedList *list, char *songName, FILE *out) {
-    if (list == NULL || list->size == 0) {
+    if (list == NULL) {
         return;
     }
 
     // Getting the iterator to the song we want to delete
     struct Node *it = list->head;
-
-    /*if (strcmp(songName, "TNT") == 0) {
-        memcpy(songName, "T.N.T.", strlen("T.N.T."));
-    }*/
-
+    
     while(it != NULL && strcmp(songName, it->data->title)) {
         it = it->next;
     }
@@ -110,9 +106,9 @@ void del_song(struct LinkedList *list, char *songName, FILE *out) {
         
         if (list->cursor == rmvdNode) {
             if (list->cursor->next != NULL) {
-                move_next(list);
+                move_next(list, out);
             } else if (list->cursor->prev != NULL) {
-                move_prev(list);
+                move_prev(list, out);
             } else {
                 list->cursor = NULL;
             }
@@ -131,9 +127,9 @@ void del_song(struct LinkedList *list, char *songName, FILE *out) {
 
         if (list->cursor == rmvdNode) {
             if (list->cursor->next != NULL) {
-                move_next(list);
+                move_next(list, out);
             } else if (list->cursor->prev != NULL) {
-                move_prev(list);
+                move_prev(list, out);
             } else {
                 list->cursor = NULL;
             }
@@ -235,8 +231,13 @@ void show_playlist(struct LinkedList *list, FILE *out) {
     fprintf(out, "]\n");
 }
 
-void move_prev(struct LinkedList *list) {
+void move_prev(struct LinkedList *list, FILE *out) {
     if (list == NULL) {
+        return;
+    }
+
+    if(list->cursor == NULL) {
+        fprintf(out, "Error: no track playing\n");
         return;
     }
 
@@ -247,8 +248,13 @@ void move_prev(struct LinkedList *list) {
     list->cursor = list->cursor->prev;
 }
 
-void move_next(struct LinkedList *list) {
+void move_next(struct LinkedList *list, FILE *out) {
     if (list == NULL) {
+        return;
+    }
+
+    if(list->cursor == NULL) {
+        fprintf(out, "Error: no track playing\n");
         return;
     }
 
