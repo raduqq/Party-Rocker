@@ -1,6 +1,13 @@
 #ifndef __UTILS_H__
 #define __UTILS_H__
 
+#include <stdio.h>
+
+#define MAX_LINE 255
+#define MAX_COMMANDS 13
+#define COMMAND_LEN 20
+#define ERROR_STATUS -1
+#define METADATA_SIZE 97
 #define SONG_DIR_NAME "songs"
 
 #define TAG_LEN 3
@@ -17,6 +24,9 @@ struct metadata {
     char year[YEAR_LEN + 1];
 };
 
-void getMelodyName(char *p, char *melody_name);
+void opening_file_check(FILE *f, char *file_name);
+void getMelodyName(char *p, char *melody_name, char **buffer);
+void extractMelodyMetadata(struct metadata *melody, char *melody_name);
+
 
 #endif

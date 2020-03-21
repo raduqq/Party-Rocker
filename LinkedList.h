@@ -3,7 +3,7 @@
 
 struct Node {
     void *data; /* Pentru ca datele stocate sa poata avea orice tip, folosim un pointer la void. */
-    struct Node* next;
+    struct Node *next, *prev;
 };
 
 struct LinkedList {
@@ -18,11 +18,11 @@ void init_list(struct LinkedList *list);
  * Implementarea acestora se va face in LinkedList.c .
  */
 
-void add_nth_node(struct LinkedList *list, int n, void *new_data);
+/*
+void add_first(struct LinkedList *list);
 
-struct Node* remove_nth_node(struct LinkedList *list, int n);
-
-int get_size(struct LinkedList *list);
+void add_last(struct LinkedList *list);
+*/
 
 void free_list(struct LinkedList **pp_list);
 

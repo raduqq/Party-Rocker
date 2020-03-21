@@ -1,12 +1,9 @@
 #!/bin/bash
 
 build:
-	gcc main.c utils.c LinkedList.c *.h -o rocker
+	gcc -g -Wall -Wextra main.c utils.c LinkedList.c *.h -o tema1
 
 clean:
-	rm rocker
-	rm media.out
-	touch media.out
-
-run:
-	./rocker media.in media.out
+	rm tema1
+	rm -r out
+	rm *.o
