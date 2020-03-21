@@ -9,27 +9,27 @@ struct Node {
 };
 
 struct LinkedList {
-    struct Node *head;
+    struct Node *head, *cursor;
     int size;
 };
 
 void init_list(struct LinkedList *list);
 
-void add_first(struct LinkedList *list, struct Node *cursor, struct metadata *newData, FILE *out);
+void add_first(struct LinkedList *list, struct metadata *value, FILE *out);
 
-void del_song(struct LinkedList *list, struct Node *cursor, char *songName, FILE *out);
+void del_song(struct LinkedList *list, char *songName, FILE *out);
 
 void show_first(struct LinkedList *list, FILE *out);
 
 void show_last(struct LinkedList *list, FILE *out);
 
-void show_curr(struct LinkedList *list, struct Node *cursor, FILE *out);
+void show_curr(struct LinkedList *list, FILE *out);
 
 void show_playlist(struct LinkedList *list, FILE *out);
 
-void move_prev(struct LinkedList *list, struct Node *cursor);
+void move_prev(struct LinkedList *list);
 
-void move_next(struct LinkedList *list, struct Node *cursor);
+void move_next(struct LinkedList *list);
 
 void free_list(struct LinkedList **pp_list);
 

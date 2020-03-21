@@ -8,6 +8,7 @@
 
 void init_list(struct LinkedList *list) {
     list->head = NULL;
+    list->cursor = NULL;
     list->size = 0;
 }
 
@@ -28,7 +29,7 @@ bool isInPlaylist(struct LinkedList *list, char* songName) {
     return 0;
 }
 
-void add_first(struct LinkedList *list, struct Node *cursor, struct metadata *value, FILE *out) {
+void add_first(struct LinkedList *list, struct metadata *value, FILE *out) {
     if(list == NULL) {
         return;
     }
@@ -38,7 +39,7 @@ void add_first(struct LinkedList *list, struct Node *cursor, struct metadata *va
 
     // Delete already-existent song from playlist
     if(isInPlaylist(list, newData->title)) {
-        del_song(list, cursor, newData->title, out);
+        del_song(list, newData->title, out);
     }
 
     // Adding the new song in playlist
@@ -48,8 +49,8 @@ void add_first(struct LinkedList *list, struct Node *cursor, struct metadata *va
     newNode->data = newData;
 
     if(list->size == 0) {
-         // List previously empty => assign cursor to the now-added node
-        cursor = newNode;
+         // List previously empty => assign list->cursor to the now-added node
+        list->cursor = newNode;
         newNode->next = NULL;
     } else {
          // If the list had at least one element
@@ -60,7 +61,7 @@ void add_first(struct LinkedList *list, struct Node *cursor, struct metadata *va
     list->size++;
 }
 
-void del_song(struct LinkedList *list, struct Node *cursor, char *songName, FILE *out) {
+void del_song(struct LinkedList *list, char *songName, FILE *out) {
     if (list == NULL || list->size == 0) {
         return;
     }
@@ -91,7 +92,8 @@ void del_song(struct LinkedList *list, struct Node *cursor, char *songName, FILE
     if (list->size == 1) {
         rmvdNode = list->head;
         list->head = NULL;
-        
+        list->cursor = NULL;
+
         free(rmvdNode->data);
         free(rmvdNode);
         list->size --;
@@ -106,11 +108,13 @@ void del_song(struct LinkedList *list, struct Node *cursor, char *songName, FILE
         list->head = list->head->next;
         list->head->prev = NULL;
         
-        if (cursor == rmvdNode) {
-            if (cursor->next != NULL) {
-                move_next(list, cursor);
-            } else if (cursor->prev != NULL) {
-                move_prev(list, cursor);
+        if (list->cursor == rmvdNode) {
+            if (list->cursor->next != NULL) {
+                move_next(list);
+            } else if (list->cursor->prev != NULL) {
+                move_prev(list);
+            } else {
+                list->cursor = NULL;
             }
         }
 
@@ -125,11 +129,13 @@ void del_song(struct LinkedList *list, struct Node *cursor, char *songName, FILE
         rmvdNode = it;
         it->prev->next = NULL; // going back a little
 
-        if (cursor == rmvdNode) {
-            if (cursor->next != NULL) {
-                move_next(list, cursor);
-            } else if (cursor->prev != NULL) {
-                move_prev(list, cursor);
+        if (list->cursor == rmvdNode) {
+            if (list->cursor->next != NULL) {
+                move_next(list);
+            } else if (list->cursor->prev != NULL) {
+                move_prev(list);
+            } else {
+                list->cursor = NULL;
             }
         }
 
@@ -189,7 +195,7 @@ void show_last(struct LinkedList *list, FILE *out) {
 
 }
 
-void show_curr(struct LinkedList *list, struct Node *cursor, FILE *out) {
+void show_curr(struct LinkedList *list, FILE *out) {
     if (list == NULL) {
         return;
     }
@@ -199,7 +205,7 @@ void show_curr(struct LinkedList *list, struct Node *cursor, FILE *out) {
         return;
     }
 
-    struct metadata *insideData = cursor->data;
+    struct metadata *insideData = list->cursor->data;
     fprintf(out, "Title: %s\nArtist: %s\nAlbum: %s\nYear: %s\n", insideData->title, insideData->artist, insideData->album, insideData->year);
    
 
@@ -229,28 +235,28 @@ void show_playlist(struct LinkedList *list, FILE *out) {
     fprintf(out, "]\n");
 }
 
-void move_prev(struct LinkedList *list, struct Node *cursor) {
+void move_prev(struct LinkedList *list) {
     if (list == NULL) {
         return;
     }
 
-    if(cursor->prev == NULL) {
+    if(list->cursor->prev == NULL) {
         return;
     }
 
-    cursor = cursor->prev;
+    list->cursor = list->cursor->prev;
 }
 
-void move_next(struct LinkedList *list, struct Node *cursor) {
+void move_next(struct LinkedList *list) {
     if (list == NULL) {
         return;
     }
 
-    if(cursor->next == NULL) {
+    if(list->cursor->next == NULL) {
         return;
     }
 
-    cursor = cursor->next;
+    list->cursor = list->cursor->next;
 }
 
 void free_list(struct LinkedList **pp_list) {

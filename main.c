@@ -1,7 +1,5 @@
 // Copyright 2020 Radu-Stefan Minea 314CA
 
-// LET'S GET THIS PARTY STARTED!
-
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
@@ -37,7 +35,6 @@ int main(int argc, char **argv) {
     buffer = malloc(MAX_LINE * sizeof(char));
     char *cp_buffer = buffer;
 
-    struct Node cursor;
     struct LinkedList *playlist;
 
     playlist = malloc(sizeof(struct LinkedList));
@@ -46,8 +43,10 @@ int main(int argc, char **argv) {
     // Queries
     for (int i = 0; i < no_queries; i++) {
         command_no = -1;
+
         buffer = cp_buffer;
         memset(buffer, '\0', MAX_LINE * sizeof(char));
+        
         fgets(buffer, MAX_LINE * sizeof(char), in);
         p = strtok_r(buffer, " \n", &buffer);
 
@@ -66,12 +65,12 @@ int main(int argc, char **argv) {
         case 0:
             getMelodyName(p, melody_name, &buffer);
             extractMelodyMetadata(&melody, melody_name);
-            add_first(playlist, &cursor, &melody, out);
+            add_first(playlist, &melody, out);
             break;
         case 1:
             getMelodyName(p, melody_name, &buffer);
             extractMelodyMetadata(&melody, melody_name);
-            //add_last
+            // add_last
             break;
         case 2:
             getMelodyName(p, melody_name, &buffer);
@@ -81,6 +80,7 @@ int main(int argc, char **argv) {
         case 3:
             getMelodyName(p, melody_name, &buffer);
             extractMelodyMetadata(&melody, melody_name);
+            // del_first
             break;
         case 4:
             break;
@@ -89,7 +89,7 @@ int main(int argc, char **argv) {
         case 6:
             getMelodyName(p, melody_name, &buffer);
             extractMelodyMetadata(&melody, melody_name);
-            del_song(playlist, &cursor, melody.title, out);
+            del_song(playlist, melody.title, out);
             break;
         case 7:
             break;
@@ -102,7 +102,7 @@ int main(int argc, char **argv) {
             show_last(playlist, out);
             break;
         case 11:
-            show_curr(playlist, &cursor, out);
+            show_curr(playlist, out);
             break;
         case 12:
             show_playlist(playlist, out);
