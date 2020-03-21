@@ -17,38 +17,35 @@ bool isInPlaylist(struct LinkedList *list, char* songName) {
     }
 
     struct Node *it = list->head;
-    struct metadata *insideData;
 
     while (it != NULL) {
-        insideData = it->data;
-        if(strcmp(songName, insideData->title) == 0) {
+        if(strcmp(songName, it->data->title) == 0) {
             return 1;
         }
+        it = it->next;
     }
 
     return 0;
 }
 
-/*
-void add_first(struct LinkedList *list, struct Node *cursor, struct metadata *newData) {
-
-// !!!!!!!!!!!! SI PREVURILE UNDE SUNT BAMBI??
-
+void add_first(struct LinkedList *list, struct Node *cursor, struct metadata *value, FILE *out) {
     if(list == NULL) {
         return;
     }
 
-    // Song already in playlist => deleted first
+    struct metadata *newData = malloc(sizeof(struct metadata));
+    memcpy(newData, value, sizeof(struct metadata));
+
+    // Delete already-existent song from playlist
     if(isInPlaylist(list, newData->title)) {
-        //del_song ... plm song-ul asta
+        del_song(list, cursor, newData->title, out);
     }
 
-    // New song in playlist
-    struct Node *it = list->head;
+    // Adding the new song in playlist
     struct Node *newNode = malloc(sizeof(struct Node));
 
+    newNode->prev = NULL;
     newNode->data = newData;
-    list->head = newNode;
 
     if(list->size == 0) {
          // List previously empty => assign cursor to the now-added node
@@ -56,75 +53,205 @@ void add_first(struct LinkedList *list, struct Node *cursor, struct metadata *ne
         newNode->next = NULL;
     } else {
          // If the list had at least one element
-        newNode->next = it;   
+        newNode->next = list->head;
+        list->head->prev = newNode; 
     }
-
+    list->head = newNode;
     list->size++;
 }
 
-// add_last
-
-// add_after
-
-// del_first
-
-// del_last
-
-// del_curr
-
-void del_song(struct LinkedList *list, char *songName) {
+void del_song(struct LinkedList *list, struct Node *cursor, char *songName, FILE *out) {
     if (list == NULL || list->size == 0) {
         return;
     }
 
-    // Finding song-to-delete by songname
+    // Getting the iterator to the song we want to delete
     struct Node *it = list->head;
-    struct metadata *insideData = it->data;
 
-    while(it != NULL && strcmp(songName, insideData->title)) {
+    /*if (strcmp(songName, "TNT") == 0) {
+        memcpy(songName, "T.N.T.", strlen("T.N.T."));
+    }*/
+
+    while(it != NULL && strcmp(songName, it->data->title)) {
         it = it->next;
-        insideData = it->data;
     }
 
-    // SONG NOT FOUND => EXIT
+    // SONG NOT FOUND => ignore command
     if (it == NULL) {
+        fprintf(out, "Error: no song found to delete\n");
         return;
     }
 
     // SONG FOUND
     struct Node *rmvdNode;
 
-/////////////////////////////////////// DEL_FIRST
+// DEL_FIRST
 
-    // One element in list => its the one we want to remove
+    // One element in list => the one we want => USABLE IN ALL
     if (list->size == 1) {
         rmvdNode = list->head;
         list->head = NULL;
         
+        free(rmvdNode->data);
+        free(rmvdNode);
         list->size --;
         return;
     }
 
+    // At least 2 songs in playlist
     // Requested song = first in list
     if (it == list->head) {
+
         rmvdNode = list->head;
         list->head = list->head->next;
+        list->head->prev = NULL;
         
-        list->size --;
+        if (cursor == rmvdNode) {
+            if (cursor->next != NULL) {
+                move_next(list, cursor);
+            } else if (cursor->prev != NULL) {
+                move_prev(list, cursor);
+            }
+        }
+
+        free(rmvdNode->data);
+        free(rmvdNode);
+        list->size--;
         return;
     }
 
-/////////////////////////////////// END_DEL_FIRST
-
-//////////////////////////////////// DEL_LAST
-
+// DEL_LAST: with more than one element
     if(it->next == NULL) {
-        it = it->prev; // going back a little
+        rmvdNode = it;
+        it->prev->next = NULL; // going back a little
+
+        if (cursor == rmvdNode) {
+            if (cursor->next != NULL) {
+                move_next(list, cursor);
+            } else if (cursor->prev != NULL) {
+                move_prev(list, cursor);
+            }
+        }
+
+        free(rmvdNode->data);
+        free(rmvdNode);
+        list->size--;
+        return;
     }
+    
+// DEL_MIDDLE: normal case: at least 3: not first, not last
+    rmvdNode = it;
+    it->next->prev = it->prev;
+    it->prev->next = it->next;
+
+    free(rmvdNode->data);
+    free(rmvdNode);
+    list->size--;
+    return;
+}
+
+void show_first(struct LinkedList *list, FILE *out) {
+    if (list == NULL) {
+        return;
+    }
+
+
+    if (list->size == 0) {
+         fprintf(out, "Error: show empty playlist\n");
+         return;
+    }
+
+    struct Node *it = list->head;
+    struct metadata *insideData = it->data;
+    fprintf(out, "Title: %s\nArtist: %s\nAlbum: %s\nYear: %s\n", insideData->title, insideData->artist, insideData->album, insideData->year);
+
+}
+
+void show_last(struct LinkedList *list, FILE *out) {
+    if (list == NULL) {
+        return;
+    }
+
+
+    if(list->size == 0) {
+        fprintf(out, "Error: show empty playlist\n");
+        return;
+    }
+
+    struct Node *it = list->head;
+    while (it->next != NULL) {
+        it = it->next;
+    }
+
+    struct metadata *insideData = it->data;
+    fprintf(out, "Title: %s\nArtist: %s\nAlbum: %s\nYear: %s\n", insideData->title, insideData->artist, insideData->album, insideData->year);
 
 
 }
-*/
+
+void show_curr(struct LinkedList *list, struct Node *cursor, FILE *out) {
+    if (list == NULL) {
+        return;
+    }
+
+    if (list->size == 0) {
+        fprintf(out, "Error: show empty playlist\n");
+        return;
+    }
+
+    struct metadata *insideData = cursor->data;
+    fprintf(out, "Title: %s\nArtist: %s\nAlbum: %s\nYear: %s\n", insideData->title, insideData->artist, insideData->album, insideData->year);
+   
+
+}
+
+void show_playlist(struct LinkedList *list, FILE *out) {
+    if (list == NULL) {
+        return;
+    }
+
+    struct Node *it = list->head;
+
+    if(it == NULL) {
+         fprintf(out, "Error: show empty playlist\n");
+         return;
+    }
+
+    fprintf(out, "[");    
+    while(it != NULL){
+        if (it->next == NULL) {
+            fprintf(out, "%s", it->data->title);
+        } else {
+            fprintf(out, "%s; ", it->data->title);
+        }
+        it = it->next;
+    }
+    fprintf(out, "]\n");
+}
+
+void move_prev(struct LinkedList *list, struct Node *cursor) {
+    if (list == NULL) {
+        return;
+    }
+
+    if(cursor->prev == NULL) {
+        return;
+    }
+
+    cursor = cursor->prev;
+}
+
+void move_next(struct LinkedList *list, struct Node *cursor) {
+    if (list == NULL) {
+        return;
+    }
+
+    if(cursor->next == NULL) {
+        return;
+    }
+
+    cursor = cursor->next;
+}
 
 void free_list(struct LinkedList **pp_list) {
     if(pp_list == NULL) {
@@ -132,14 +259,13 @@ void free_list(struct LinkedList **pp_list) {
     }
 
     struct Node *it;
-    it = (*pp_list)->head; // From pointer to list to list.
-
     // Solution: Mananci din lista ca la Pacman
 
     // Eliberez fix ce nu e NULL
     while((*pp_list)->head != NULL) {
         it = (*pp_list)->head;
         (*pp_list)->head = ((*pp_list)->head)->next;
+        free(it->data);
         free(it);
     }
 

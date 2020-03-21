@@ -1,0 +1,4 @@
+Day 1 (19.03.2020)
+- Input interpretation
+Day 2 (20.03.2020)
+- Song metadata extraction

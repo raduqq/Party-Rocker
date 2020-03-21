@@ -33,6 +33,5 @@ void extractMelodyMetadata(struct metadata *melody, char *melody_name) {
     fread(melody->album, ALBUM_LEN, 1, f);
     fread(melody->year, YEAR_LEN, 1, f);
 
-
     fclose(f);
 }

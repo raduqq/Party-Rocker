@@ -1,5 +1,7 @@
 // Copyright 2020 Radu-Stefan Minea 314CA
 
+// LET'S GET THIS PARTY STARTED!
+
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
@@ -32,11 +34,10 @@ int main(int argc, char **argv) {
     char *buffer, melody_name[MAX_LINE], *p, query[COMMAND_LEN];
     fscanf(in, "%d\n", &no_queries);
 
-    buffer = calloc(MAX_LINE, sizeof(char));
+    buffer = malloc(MAX_LINE * sizeof(char));
     char *cp_buffer = buffer;
 
-    struct Node *currNode;
-    struct Node *cursor = NULL;
+    struct Node cursor;
     struct LinkedList *playlist;
 
     playlist = malloc(sizeof(struct LinkedList));
@@ -45,7 +46,9 @@ int main(int argc, char **argv) {
     // Queries
     for (int i = 0; i < no_queries; i++) {
         command_no = -1;
-        fgets(buffer, MAX_LINE, in);
+        buffer = cp_buffer;
+        memset(buffer, '\0', MAX_LINE * sizeof(char));
+        fgets(buffer, MAX_LINE * sizeof(char), in);
         p = strtok_r(buffer, " \n", &buffer);
 
         for (int j = 0; j < MAX_COMMANDS; j++) {
@@ -63,7 +66,7 @@ int main(int argc, char **argv) {
         case 0:
             getMelodyName(p, melody_name, &buffer);
             extractMelodyMetadata(&melody, melody_name);
-            //add_first
+            add_first(playlist, &cursor, &melody, out);
             break;
         case 1:
             getMelodyName(p, melody_name, &buffer);
@@ -76,7 +79,8 @@ int main(int argc, char **argv) {
             // add after
             break;
         case 3:
-            // del song:
+            getMelodyName(p, melody_name, &buffer);
+            extractMelodyMetadata(&melody, melody_name);
             break;
         case 4:
             break;
@@ -85,19 +89,23 @@ int main(int argc, char **argv) {
         case 6:
             getMelodyName(p, melody_name, &buffer);
             extractMelodyMetadata(&melody, melody_name);
-            //del song
+            del_song(playlist, &cursor, melody.title, out);
             break;
         case 7:
             break;
         case 8:
             break;
         case 9:
+            show_first(playlist, out);
             break;
         case 10:
+            show_last(playlist, out);
             break;
         case 11:
+            show_curr(playlist, &cursor, out);
             break;
         case 12:
+            show_playlist(playlist, out);
             break;
         default:
             fprintf(stderr, "Wrong command! Please try again.\n");

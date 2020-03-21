@@ -1,6 +1,16 @@
-5
-ADD_FIRST Slayer - Angel of Death.mp3
-ADD_AFTER The Beatles - Hey Jude.mp3
-ADD_LAST Ian x Azteca - BAG UN BLUNT.mp3
+15
+SHOW_FIRST
+SHOW_CURR
+SHOW_LAST
+ADD_FIRST ACDC - TNT.mp3
+SHOW_FIRST
+SHOW_CURR
+SHOW_LAST
+ADD_FIRST Justin Bieber - Baby.mp3
 DEL_SONG Costel Biju - Nebunia din Mamaia.mp3
-DEL_FIRST
+ADD_FIRST The Beatles - Hey Jude.mp3
+DEL_SONG ACDC - TNT.mp3
+SHOW_FIRST
+SHOW_CURR
+SHOW_LAST
+SHOW_PLAYLIST

@@ -1,8 +1,10 @@
 #ifndef __LINKEDLIST_H__
 #define __LINKEDLIST_H__
 
+#include <stdio.h>
+
 struct Node {
-    void *data; /* Pentru ca datele stocate sa poata avea orice tip, folosim un pointer la void. */
+    struct metadata *data;
     struct Node *next, *prev;
 };
 
@@ -13,16 +15,21 @@ struct LinkedList {
 
 void init_list(struct LinkedList *list);
 
-/*
- * Acestea sunt functiile pe care trebuie sa le implementam.
- * Implementarea acestora se va face in LinkedList.c .
- */
+void add_first(struct LinkedList *list, struct Node *cursor, struct metadata *newData, FILE *out);
 
-/*
-void add_first(struct LinkedList *list);
+void del_song(struct LinkedList *list, struct Node *cursor, char *songName, FILE *out);
 
-void add_last(struct LinkedList *list);
-*/
+void show_first(struct LinkedList *list, FILE *out);
+
+void show_last(struct LinkedList *list, FILE *out);
+
+void show_curr(struct LinkedList *list, struct Node *cursor, FILE *out);
+
+void show_playlist(struct LinkedList *list, FILE *out);
+
+void move_prev(struct LinkedList *list, struct Node *cursor);
+
+void move_next(struct LinkedList *list, struct Node *cursor);
 
 void free_list(struct LinkedList **pp_list);
 
@@ -30,4 +37,4 @@ void print_int_linkedlist(struct LinkedList *list);
 
 void print_string_linkedlist(struct LinkedList *list);
 
-#endif /* __LINKEDLIST_H__ */
+#endif
