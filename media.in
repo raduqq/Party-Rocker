@@ -1,14 +1,11 @@
-13
-ADD_FIRST O-Zone - De Ce Plang Chitarele.mp3
-ADD_FIRST Pink Floyd - Another Brick in The Wall Part 2.mp3
-MOVE_PREV
-SHOW_CURR
-SHOW_FIRST
-DEL_SONG Pink Floyd - Another Brick in The Wall Part 2.mp3
-SHOW_PLAYLIST
+10
 ADD_FIRST Ian x Azteca - BAG UN BLUNT.mp3
 ADD_FIRST Metallica - Battery.mp3
-ADD_FIRST ACDC - TNT.mp3
-DEL_SONG ACDC - TNT.mp3
+ADD_FIRST Costel Biju - Nebunia din Mamaia.mp3
+DEL_CURR
 SHOW_CURR
+MOVE_PREV
+DEL_CURR
+SHOW_CURR
+DEL_CURR
 SHOW_PLAYLIST

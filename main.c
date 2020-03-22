@@ -81,8 +81,10 @@ int main(int argc, char **argv) {
             del_first(playlist, out);
             break;
         case 4:
+            del_last(playlist, out);
             break;
         case 5:
+            del_curr(playlist, out);
             break;
         case 6:
             getMelodyName(p, melody_name, &buffer);

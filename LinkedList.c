@@ -29,6 +29,18 @@ bool isInPlaylist(struct LinkedList *list, char* songName) {
     return 0;
 }
 
+void moveRemovedCursor(struct LinkedList *list, FILE *out) {
+    if (list->cursor->next != NULL) {
+        move_next(list, out);
+    } else if (list->cursor->prev != NULL) {
+        move_prev(list, out);
+    } else {
+        // Technically not possible (since we have had at least 2 elements => moving left/right would be possible)
+        // Including it nonetheless
+        list->cursor = NULL;
+    }
+}
+
 void add_first(struct LinkedList *list, struct metadata *value, FILE *out) {
     if(list == NULL) {
         return;
@@ -61,6 +73,33 @@ void add_first(struct LinkedList *list, struct metadata *value, FILE *out) {
     list->size++;
 }
 
+// Auxiliary function called within "main" funciton => checks are made in "main" functions
+void del_lonely_element(struct LinkedList *list) {
+    struct Node *rmvdNode;
+    rmvdNode = list->head;
+    list->head = NULL;
+    list->cursor = NULL;
+
+    free(rmvdNode->data);
+    free(rmvdNode);
+    list->size --;
+}
+
+// Auxiliary function
+void del_mid(struct LinkedList *list, struct Node *it, FILE *out) {
+    struct Node *rmvdNode = it;
+    it->next->prev = it->prev;
+    it->prev->next = it->next;
+
+    if(list->cursor == rmvdNode) {
+        moveRemovedCursor(list, out);
+    }
+
+    free(rmvdNode->data);
+    free(rmvdNode);
+    list->size--;
+}
+
 void del_first(struct LinkedList *list, FILE *out) {
     if (list == NULL) {
         return;
@@ -77,13 +116,7 @@ void del_first(struct LinkedList *list, FILE *out) {
 
     // One element in list => the one we want => USABLE IN ALL
     if (list->size == 1) {
-        rmvdNode = list->head;
-        list->head = NULL;
-        list->cursor = NULL;
-
-        free(rmvdNode->data);
-        free(rmvdNode);
-        list->size --;
+        del_lonely_element(list);
         return;
     }
 
@@ -93,15 +126,7 @@ void del_first(struct LinkedList *list, FILE *out) {
     list->head->prev = NULL;
         
     if (list->cursor == rmvdNode) {
-        if (list->cursor->next != NULL) {
-            move_next(list, out);
-        } else if (list->cursor->prev != NULL) {
-            move_prev(list, out);
-        } else {
-            // Technically not possible (since we have had at least 2 elements => moving left/right would be possible)
-            // Including it nonetheless
-            list->cursor = NULL;
-        }
+        moveRemovedCursor(list, out);
     }
 
     free(rmvdNode->data);
@@ -111,7 +136,63 @@ void del_first(struct LinkedList *list, FILE *out) {
 }
 
 void del_last(struct LinkedList *list, FILE *out) {
-    
+    if (list == NULL) {
+        return;
+    }  
+
+    struct Node *it = list->head;
+
+    if (it == NULL) {
+        fprintf(out, "Error: no song found to delete\n");
+        return;
+    }
+
+    struct Node *rmvdNode;
+
+    // If there's only one fucker in the playlist
+    if (list->size == 1) {
+        del_lonely_element(list);
+        return;
+    }
+
+    while(it->next != NULL) {
+        it = it->next;
+    }
+
+    rmvdNode = it;
+    it->prev->next = NULL;
+
+    if (list->cursor == rmvdNode) {
+        moveRemovedCursor(list, out);
+    }
+
+    free(rmvdNode->data);
+    free(rmvdNode);
+    list->size--;
+    return;
+}
+
+void del_curr(struct LinkedList *list, FILE *out) {
+    if (list == NULL) {
+        return;
+    }
+
+    if (list->cursor == NULL) {
+        fprintf(out, "Error: no song found to delete\n");
+        return;
+    }
+
+    if (list->cursor == list->head) {
+        del_first(list, out);
+        return;
+    }
+
+    if (list->cursor->next == NULL) {
+        del_last(list, out);
+        return;
+    }
+
+    del_mid(list, list->cursor, out);
 }
 
 void del_song(struct LinkedList *list, char *songName, FILE *out) {
@@ -132,10 +213,8 @@ void del_song(struct LinkedList *list, char *songName, FILE *out) {
         return;
     }
 
-    // SONG FOUND
-    struct Node *rmvdNode;
-
-    // DEL_FIRST
+    //SONG FOUND
+// DEL_FIRST
     if (it == list->head) {
         del_first(list, out);
         return;
@@ -143,34 +222,12 @@ void del_song(struct LinkedList *list, char *songName, FILE *out) {
 
 // DEL_LAST: with more than one element
     if(it->next == NULL) {
-        rmvdNode = it;
-        it->prev->next = NULL; // going back a little
-
-        if (list->cursor == rmvdNode) {
-            if (list->cursor->next != NULL) {
-                move_next(list, out);
-            } else if (list->cursor->prev != NULL) {
-                move_prev(list, out);
-            } else {
-                list->cursor = NULL;
-            }
-        }
-
-        free(rmvdNode->data);
-        free(rmvdNode);
-        list->size--;
+        del_last(list, out);
         return;
     }
     
 // DEL_MIDDLE: normal case: at least 3: not first, not last
-    rmvdNode = it;
-    it->next->prev = it->prev;
-    it->prev->next = it->next;
-
-    free(rmvdNode->data);
-    free(rmvdNode);
-    list->size--;
-    return;
+    del_mid(list, it, out);
 }
 
 void show_first(struct LinkedList *list, FILE *out) {
@@ -304,33 +361,4 @@ void free_list(struct LinkedList **pp_list) {
 
     free((*pp_list)->head);
     free(*pp_list);
-}
-
-void print_int_linkedlist(struct LinkedList *list) {
-    if (list == NULL || list->size == 0) {
-        return;
-    }
-
-    struct Node *it = list->head;
-
-    while (it != NULL) {
-        printf("%d ", *((int *)it->data));
-        it = it->next;
-    } 
-
-    printf("\n");
-}
-
-void print_string_linkedlist(struct LinkedList *list) {
-    if (list == NULL || list->size == 0) {
-        return;
-    }
-
-    struct Node *it = list->head;    
-
-    while (it != NULL) {
-        printf("%s ", (char *)it->data);
-        it = it->next;
-    }
-    printf("\n");
 }

@@ -1,13 +1,20 @@
-12
+19
+DEL_LAST
 ADD_FIRST Pink Floyd - Another Brick in The Wall Part 2.mp3
-MOVE_PREV
+DEL_LAST
 SHOW_CURR
-SHOW_FIRST
-DEL_SONG Pink Floyd - Another Brick in The Wall Part 2.mp3
-SHOW_PLAYLIST
-DEL_FIRST
+DEL_LAST
 ADD_FIRST Pink Floyd - Another Brick in The Wall Part 2.mp3
 ADD_FIRST Metallica - Battery.mp3
+DEL_LAST
+SHOW_CURR
 ADD_FIRST Ian x Azteca - BAG UN BLUNT.mp3
 ADD_FIRST Pink Floyd - Another Brick in The Wall Part 2.mp3
+MOVE_NEXT
+SHOW_CURR
+DEL_LAST
+SHOW_CURR
+SHOW_LAST
+ADD_FIRST Ian x Azteca - BAG UN BLUNT.mp3
+DEL_FIRST
 SHOW_PLAYLIST
