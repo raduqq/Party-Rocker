@@ -1,6 +1,19 @@
-5
-DEL_SONG Metallica - Battery.mp3
+18
+SHOW_CURR
+DEL_FIRST
 ADD_FIRST O-Zone - De Ce Plang Chitarele.mp3
-DEL_SONG O-Zone - De Ce Plang Chitarele.mp3
-DEL_SONG O-Zone - De Ce Plang Chitarele.mp3
+SHOW_CURR
+DEL_FIRST
+SHOW_PLAYLIST
+ADD_FIRST Ian x Azteca - BAG UN BLUNT.mp3
+ADD_FIRST Metallica - Battery.mp3
+ADD_FIRST ACDC - TNT.mp3
+DEL_FIRST
+MOVE_PREV
+SHOW_CURR
+MOVE_NEXT
+MOVE_NEXT
+SHOW_CURR
+DEL_FIRST
+SHOW_CURR
 SHOW_PLAYLIST

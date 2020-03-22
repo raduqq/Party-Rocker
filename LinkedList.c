@@ -61,6 +61,55 @@ void add_first(struct LinkedList *list, struct metadata *value, FILE *out) {
     list->size++;
 }
 
+void del_first(struct LinkedList *list, FILE *out) {
+    if (list == NULL) {
+        return;
+    }
+
+    struct Node *it = list->head;
+
+    if (it == NULL) {
+        fprintf(out, "Error: no song found to delete\n");
+        return;
+    }
+
+    struct Node *rmvdNode;
+
+    // One element in list => the one we want => USABLE IN ALL
+    if (list->size == 1) {
+        rmvdNode = list->head;
+        list->head = NULL;
+        list->cursor = NULL;
+
+        free(rmvdNode->data);
+        free(rmvdNode);
+        list->size --;
+        return;
+    }
+
+    // At least 2 songs in playlist
+    rmvdNode = list->head;
+    list->head = list->head->next;
+    list->head->prev = NULL;
+        
+    if (list->cursor == rmvdNode) {
+        if (list->cursor->next != NULL) {
+            move_next(list, out);
+        } else if (list->cursor->prev != NULL) {
+            move_prev(list, out);
+        } else {
+            // Technically not possible (since we have had at least 2 elements => moving left/right would be possible)
+            // Including it nonetheless
+            list->cursor = NULL;
+        }
+    }
+
+    free(rmvdNode->data);
+    free(rmvdNode);
+    list->size--;
+    return;
+}
+
 void del_song(struct LinkedList *list, char *songName, FILE *out) {
     if (list == NULL) {
         return;

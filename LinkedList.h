@@ -17,6 +17,8 @@ void init_list(struct LinkedList *list);
 
 void add_first(struct LinkedList *list, struct metadata *value, FILE *out);
 
+void del_first(struct LinkedList *list, FILE *out);
+
 void del_song(struct LinkedList *list, char *songName, FILE *out);
 
 void show_first(struct LinkedList *list, FILE *out);

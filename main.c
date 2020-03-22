@@ -78,9 +78,7 @@ int main(int argc, char **argv) {
             // add after
             break;
         case 3:
-            getMelodyName(p, melody_name, &buffer);
-            extractMelodyMetadata(&melody, melody_name);
-            // del_first
+            del_first(playlist, out);
             break;
         case 4:
             break;
