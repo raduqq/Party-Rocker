@@ -73,6 +73,79 @@ void add_first(struct LinkedList *list, struct metadata *value, FILE *out) {
     list->size++;
 }
 
+void add_last(struct LinkedList *list, struct metadata *value, FILE *out) {
+    if (list == NULL) {
+        return;
+    }
+
+    struct metadata *newData = malloc(sizeof(struct metadata));
+    memcpy(newData, value, sizeof(struct metadata));
+
+    // Delete already-existent song from playlist
+    if(isInPlaylist(list, newData->title)) {
+        del_song(list, newData->title, out);
+    }
+
+    struct Node *it = list->head;
+    struct Node *newNode = malloc(sizeof(struct Node));
+
+    newNode->next = NULL;
+    newNode->data = newData;
+
+    if (list->size == 0) {
+        list->cursor = newNode;
+        newNode->prev = NULL;
+        list->head = newNode;
+    } else {
+        while (it->next != NULL) {
+            it = it->next;
+        }
+        it->next = newNode;
+        newNode->prev = it;
+    }
+
+    list->size++;
+}
+
+void add_after(struct LinkedList *list, struct metadata *value, FILE *out) {
+    if (list == NULL) {
+        return;
+    }
+
+    if (list->cursor == NULL) {
+        return;
+    }
+
+    if (strcmp(list->cursor->data->title, value->title) == 0) {
+        return;
+    }
+
+    if(isInPlaylist(list, value->title)) {
+        del_song(list, value->title, out);
+    }
+
+    if(list->cursor->next == NULL) {
+        add_last(list, value, out);
+        return;
+    }
+
+    struct metadata *newData = malloc(sizeof(struct metadata));
+    memcpy(newData, value, sizeof(struct metadata));
+
+    // Add middle
+    struct Node *it = list->cursor;
+    struct Node *newNode = malloc(sizeof(struct Node));
+
+    newNode->data = newData;
+
+    newNode->next = it->next;
+    it->next->prev = newNode;
+    it->next = newNode;
+    newNode->prev = it;
+
+    list->size++;
+}
+
 // Auxiliary function called within "main" funciton => checks are made in "main" functions
 void del_lonely_element(struct LinkedList *list) {
     struct Node *rmvdNode;
@@ -82,7 +155,7 @@ void del_lonely_element(struct LinkedList *list) {
 
     free(rmvdNode->data);
     free(rmvdNode);
-    list->size --;
+    list->size--;
 }
 
 // Auxiliary function
@@ -178,7 +251,7 @@ void del_curr(struct LinkedList *list, FILE *out) {
     }
 
     if (list->cursor == NULL) {
-        fprintf(out, "Error: no song found to delete\n");
+        fprintf(out, "Error: no track playing\n");
         return;
     }
 
@@ -214,19 +287,16 @@ void del_song(struct LinkedList *list, char *songName, FILE *out) {
     }
 
     //SONG FOUND
-// DEL_FIRST
     if (it == list->head) {
         del_first(list, out);
         return;
     }
 
-// DEL_LAST: with more than one element
     if(it->next == NULL) {
         del_last(list, out);
         return;
     }
     
-// DEL_MIDDLE: normal case: at least 3: not first, not last
     del_mid(list, it, out);
 }
 
@@ -291,11 +361,6 @@ void show_playlist(struct LinkedList *list, FILE *out) {
     }
 
     struct Node *it = list->head;
-
-    if(it == NULL) {
-         fprintf(out, "Error: show empty playlist\n");
-         return;
-    }
 
     fprintf(out, "[");    
     while(it != NULL){

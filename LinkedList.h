@@ -19,6 +19,10 @@ void moveRemovedCursor(struct LinkedList *list, FILE *out);
 
 void add_first(struct LinkedList *list, struct metadata *value, FILE *out);
 
+void add_last(struct LinkedList *list, struct metadata *value, FILE *out);
+
+void add_after(struct LinkedList *list, struct metadata *value, FILE *out);
+
 void del_lonely_element(struct LinkedList *list);
 
 void del_mid(struct LinkedList *list, struct Node *it, FILE *out);

@@ -26,6 +26,7 @@ int main(int argc, char **argv) {
     opening_file_check(out, out_name);
 
     // Declaring variables
+    int i, j;
     struct metadata melody;
     char commands[MAX_COMMANDS][COMMAND_LEN] = {"ADD_FIRST", "ADD_LAST", "ADD_AFTER", "DEL_FIRST", "DEL_LAST", "DEL_CURR", "DEL_SONG", "MOVE_NEXT", "MOVE_PREV", "SHOW_FIRST", "SHOW_LAST", "SHOW_CURR", "SHOW_PLAYLIST"};
     int no_queries, command_no;
@@ -41,7 +42,7 @@ int main(int argc, char **argv) {
     init_list(playlist);
 
     // Queries
-    for (int i = 0; i < no_queries; i++) {
+    for (i = 0; i < no_queries; i++) {
         command_no = -1;
 
         buffer = cp_buffer;
@@ -50,7 +51,7 @@ int main(int argc, char **argv) {
         fgets(buffer, MAX_LINE * sizeof(char), in);
         p = strtok_r(buffer, " \n", &buffer);
 
-        for (int j = 0; j < MAX_COMMANDS; j++) {
+        for (j = 0; j < MAX_COMMANDS; j++) {
             if(strcmp(p, commands[j]) == 0) {
                 snprintf(query, sizeof(query), "%s", p);
                 command_no = j;
@@ -70,12 +71,12 @@ int main(int argc, char **argv) {
         case 1:
             getMelodyName(p, melody_name, &buffer);
             extractMelodyMetadata(&melody, melody_name);
-            // add_last
+            add_last(playlist, &melody, out);
             break;
         case 2:
             getMelodyName(p, melody_name, &buffer);
             extractMelodyMetadata(&melody, melody_name);
-            // add after
+            add_after(playlist, &melody, out);
             break;
         case 3:
             del_first(playlist, out);
