@@ -28,7 +28,10 @@ int main(int argc, char **argv) {
     // Declaring variables
     int i, j;
     struct metadata melody;
-    char commands[MAX_COMMANDS][COMMAND_LEN] = {"ADD_FIRST", "ADD_LAST", "ADD_AFTER", "DEL_FIRST", "DEL_LAST", "DEL_CURR", "DEL_SONG", "MOVE_NEXT", "MOVE_PREV", "SHOW_FIRST", "SHOW_LAST", "SHOW_CURR", "SHOW_PLAYLIST"};
+    char commands[MAX_COMMANDS][COMMAND_LEN] = {"ADD_FIRST", "ADD_LAST",
+     "ADD_AFTER", "DEL_FIRST", "DEL_LAST", "DEL_CURR", "DEL_SONG",
+     "MOVE_NEXT", "MOVE_PREV", "SHOW_FIRST", "SHOW_LAST", "SHOW_CURR",
+     "SHOW_PLAYLIST"};
     int no_queries, command_no;
     char *buffer, melody_name[MAX_LINE], *p, query[COMMAND_LEN];
     fscanf(in, "%d\n", &no_queries);
@@ -47,21 +50,23 @@ int main(int argc, char **argv) {
 
         buffer = cp_buffer;
         memset(buffer, '\0', MAX_LINE * sizeof(char));
-        
+
         fgets(buffer, MAX_LINE * sizeof(char), in);
         p = strtok_r(buffer, " \n", &buffer);
 
+        // Matching the input command with its index
         for (j = 0; j < MAX_COMMANDS; j++) {
-            if(strcmp(p, commands[j]) == 0) {
+            if (strcmp(p, commands[j]) == 0) {
                 snprintf(query, sizeof(query), "%s", p);
                 command_no = j;
                 break;
             }
         }
-        
+
         memset(melody_name, '\0', sizeof(melody_name));
         memset(&melody, '\0', sizeof(melody));
-        
+
+        // Executing commands
         switch (command_no) {
         case 0:
             getMelodyName(p, melody_name, &buffer);
@@ -112,6 +117,7 @@ int main(int argc, char **argv) {
             break;
         default:
             fprintf(stderr, "Wrong command! Please try again.\n");
+            // Decrementing "i" => an extra command for the user
             i--;
             break;
         }
@@ -123,6 +129,8 @@ int main(int argc, char **argv) {
     free(in_name);
     free(out_name);
 
+    // strtok modified the address of the pointer buffer
+    // => restoring the address with a copy of the initial buffer
     buffer = cp_buffer;
     free(buffer);
 

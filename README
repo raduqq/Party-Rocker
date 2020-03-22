@@ -57,17 +57,54 @@ year) citind binar fiserele melodiilor
 
 	- A fost mult mai usor de manipulat cursorul astfel decat l-am fi
 	declarat in main, fie static fie dinamic
-1) ADD
+
+* add.c
 > add_after(...) este construit cu ajutorul add_first(...) si add_last(...)
-2) DEL
->
-3) SHOW
->
-4) MOVE
->
+
+* del.c
+> del_curr(...) si del_song(...) sunt construite cu ajutorul del_first(...),
+del_mid(...) si del_last(...)
+	- del_mid(...):	playlist-ul are cel putin 3 elemente, si se vrea sters
+			o melodie care nu este nici la inceputul, nici la
+			finalul listei
+
+* show.c
+> Functiile de afisare a melodiilor cerute sau a playlist-ului, cu mesajele
+de eroare aferente
+
+* move.c
+> moveRemovedCursor(...) este folosit in toate functiile de stergere pentru a
+repozitiona cursorul plasat pana in momentul de fata pe melodia ce se vrea a fi
+stearsa
 ===============================================================================
 Limitari
 
-> Codul nu este foarte bine organizat: puteam sa separ LinkedList.c
+> Codul nu este tocmai optim (d.p.d.v. al timpului):
+	- Pentru add_after, del_song, del_curr se fac unele verificari de 2 ori
+	 (de exemplu, daca lista este initializata):
+		+ Cele 3 functii mentionate mai sus apeleaza inauntrul lor 
+		add_first/last si del_first/last care fac si ele aceleasi
+		verificari
+		+ Se intampla astfel, deoarece add/del_first/last pot fi
+		apelate si prin input-ul (adesea eronat) al utilizatorului,
+		dar si in interiorul functiilor de adaugare/stergere mai mari,
+		in scopul unei logici mai fluente a progrmaului
 ===============================================================================
 Observatii
+
+> Initial, m-a speriat tema, pentru ca vedeam ca aveam 12 functionalitati de
+implementat in 3 zile (thank you, time management skills), iar colegii
+isi puneau foarte, foarte multe intrebari pe grup, in special legate de
+valgrind
+
+> Totusi, odata ce am facut "main-ul" programului (playlist.c) si am facut
+add_first/last si del_first/last, restul au venit aproape de la sine
+
+> Overall, a fost o tema care m-a convins de utilitatea implementarii
+incrementale: ciclul <think - code - test - debug> aplicat fiecarei
+functionalitati in parte:
+	- Desi teama de valgrind-ul de pe checker era mare, pana si prima
+	incarcare pe checker a fost flawless d.p.d.v. al valgrind-ului
+		+ Asta pentru ca am testat local fara mila, stiind ca daca
+		o functie crapa din neatentia la detalii pe parcurs, crapa tot
+		mai incolo

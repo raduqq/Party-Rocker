@@ -26,6 +26,8 @@ void extractMelodyMetadata(struct metadata *melody, char *melody_name) {
 
   FILE *f = fopen(file_path, "rb");
   opening_file_check(f, melody_name);
+
+  // Positioning ourselves exactly ahead of the metadata we need to read
   fseek(f, -METADATA_SIZE, SEEK_END);
 
   fread(melody->tag, TAG_LEN, 1, f);

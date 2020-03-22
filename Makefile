@@ -2,7 +2,7 @@
 
 CC=gcc
 FLAGS = -Wall -Wextra
-SRC=playlist.c LinkedList.c utils.c
+SRC=playlist.c LinkedList.c utils.c add.c del.c show.c move.c
 LIB=*.h
 TARGET=tema1
 
