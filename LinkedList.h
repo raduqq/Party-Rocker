@@ -1,16 +1,18 @@
-#ifndef __LINKEDLIST_H__
-#define __LINKEDLIST_H__
+// Copyright 2020 Radu-Stefan Minea 314CA
+
+#ifndef LINKEDLIST_H__
+#define LINKEDLIST_H__
 
 #include <stdio.h>
 
 struct Node {
-    struct metadata *data;
-    struct Node *next, *prev;
+  struct metadata *data;
+  struct Node *next, *prev;
 };
 
 struct LinkedList {
-    struct Node *head, *cursor;
-    int size;
+  struct Node *head, *cursor;
+  int size;
 };
 
 void init_list(struct LinkedList *list);
@@ -53,4 +55,4 @@ void print_int_linkedlist(struct LinkedList *list);
 
 void print_string_linkedlist(struct LinkedList *list);
 
-#endif
+#endif  // LINKEDLIST_H_

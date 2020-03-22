@@ -1,5 +1,7 @@
-#ifndef __UTILS_H__
-#define __UTILS_H__
+// Copyright 2020 Radu-Stefan Minea 314CA
+
+#ifndef UTILS_H__
+#define UTILS_H__
 
 #include <stdio.h>
 
@@ -17,16 +19,15 @@
 #define YEAR_LEN 4
 
 struct metadata {
-    char tag[TAG_LEN + 1];
-    char title[TITLE_LEN + 1];
-    char artist[ARTIST_LEN + 1];
-    char album[ALBUM_LEN + 1];
-    char year[YEAR_LEN + 1];
+  char tag[TAG_LEN + 1];
+  char title[TITLE_LEN + 1];
+  char artist[ARTIST_LEN + 1];
+  char album[ALBUM_LEN + 1];
+  char year[YEAR_LEN + 1];
 };
 
 void opening_file_check(FILE *f, char *file_name);
 void getMelodyName(char *p, char *melody_name, char **buffer);
 void extractMelodyMetadata(struct metadata *melody, char *melody_name);
 
-
-#endif
+#endif  // UTILS_H_

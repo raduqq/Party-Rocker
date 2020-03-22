@@ -1,0 +1,73 @@
+===============================================================================
+Tema 1 SD - Music Playlist
+Nume: Minea Radu-Stefan
+Seria: CA
+Grupa: 314CA
+===============================================================================
+Timpul petrecut pe tema: ~ 3 zile
+===============================================================================
+Descrierea proiectului
+
+> Tema proiectului este data de simularea unui Playlist Manager, ori, mai
+precis, a urmatoarelor functionalitati ale acestuia:
+	- Adaugarea melodiilor:
+		+ La inceputul/finalul listei		(ADD_FIRST/LAST)
+		+ Dupa melodia care este pe play	(ADD_AFTER)
+	- Stergerea melodiilor:
+		+ La inceputul sau finalul listei	(DEL_FIRST/LAST)
+		+ Care sunt pe play			(DEL_CURR)
+		+ Precizate de user			(DEL_SONG)
+	- Afisarea melodiilor:
+		+ De la inceputul/finalul listei	(SHOW_FIRST/LAST)
+		+ Care sunt pe play			(SHOW_CURR)
+		+ Afisarea intregului playlist		(SHOW_PLAYLIST)
+	- Schimbarea melodiei care este pe play:
+		+ Punerea pe play a urmatoarei melodii	(MOVE_NEXT)
+		+ Punerea pe play a melodiei dinainte	(MOVE_PREV)
+===============================================================================
+Rulare
+
+> User-ul creeaza un fisier <media.in> unde isi va trece comenzile dorite
+> Terminal: 
+	- make
+	- ./tema1 <media.in> <media.out>
+===============================================================================
+Structura proiectului
+
+* Makefile
+> Include regulile build si clean
+
+* playlist.c
+> "main-ul" programului
+> Se interpreteaza inputul venit din <media.in> prin statement-ul switch
+
+* utils.c & utils.h
+> opening_file_check(...) : verificare a deschiderii corecte a fisierelor
+> Includ functii ce extrag metadatele fisierelor (tag, title, album, artist, 
+year) citind binar fiserele melodiilor
+
+
+* LinkedList.c & LinkedList.h
+> Pentru simplitate, am inclus cursorul in structura listei duble inlantuite:
+	
+	struct LinkedList {
+		struct Node *head, *cursor;
+		int size;
+	}
+
+	- A fost mult mai usor de manipulat cursorul astfel decat l-am fi
+	declarat in main, fie static fie dinamic
+1) ADD
+> add_after(...) este construit cu ajutorul add_first(...) si add_last(...)
+2) DEL
+>
+3) SHOW
+>
+4) MOVE
+>
+===============================================================================
+Limitari
+
+> Codul nu este foarte bine organizat: puteam sa separ LinkedList.c
+===============================================================================
+Observatii

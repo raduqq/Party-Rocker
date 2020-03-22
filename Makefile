@@ -1,9 +1,13 @@
-#!/bin/bash
+#Copyright 2020 Radu-Stefan Minea 314CA
+
+CC=gcc
+FLAGS = -Wall -Wextra
+SRC=playlist.c LinkedList.c utils.c
+LIB=*.h
+TARGET=tema1
 
 build:
-	gcc -g -Wall -Wextra main.c utils.c LinkedList.c *.h -o tema1
-
+	$(CC) $(FLAGS) $(SRC) $(LIB) -o $(TARGET)
 clean:
-	rm tema1
-	rm -r out
+	rm -f $(TARGET)
 	rm *.o
