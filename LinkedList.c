@@ -110,6 +110,10 @@ void del_first(struct LinkedList *list, FILE *out) {
     return;
 }
 
+void del_last(struct LinkedList *list, FILE *out) {
+    
+}
+
 void del_song(struct LinkedList *list, char *songName, FILE *out) {
     if (list == NULL) {
         return;
@@ -131,41 +135,9 @@ void del_song(struct LinkedList *list, char *songName, FILE *out) {
     // SONG FOUND
     struct Node *rmvdNode;
 
-// DEL_FIRST
-
-    // One element in list => the one we want => USABLE IN ALL
-    if (list->size == 1) {
-        rmvdNode = list->head;
-        list->head = NULL;
-        list->cursor = NULL;
-
-        free(rmvdNode->data);
-        free(rmvdNode);
-        list->size --;
-        return;
-    }
-
-    // At least 2 songs in playlist
-    // Requested song = first in list
+    // DEL_FIRST
     if (it == list->head) {
-
-        rmvdNode = list->head;
-        list->head = list->head->next;
-        list->head->prev = NULL;
-        
-        if (list->cursor == rmvdNode) {
-            if (list->cursor->next != NULL) {
-                move_next(list, out);
-            } else if (list->cursor->prev != NULL) {
-                move_prev(list, out);
-            } else {
-                list->cursor = NULL;
-            }
-        }
-
-        free(rmvdNode->data);
-        free(rmvdNode);
-        list->size--;
+        del_first(list, out);
         return;
     }
 
